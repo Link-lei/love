@@ -716,7 +716,7 @@
       <h1><span class="typing-name" id="typingName"></span></h1>
       <p class="subtitle">通关三关，解锁三段只想说给你听的话。</p>
       <div class="hero-photo-wrap">
-        <img class="hero-photo" src="/Users/link/.openclaw/media/inbound/cb8ff0410357e2369c10f1902f71c47c---1074c63d-d1af-4982-b8ae-3b643ade606f.jpg" alt="唐慧慧和你的合照" />
+        <img class="hero-photo" src="./assets/photos/10.jpg" alt="唐慧慧和你的合照" loading="eager" decoding="async" />
         <div class="hero-photo-overlay">
           <div class="hero-photo-title">To 唐慧慧</div>
           <div class="hero-photo-sub">一份通关后才能完全打开的小情书</div>
@@ -802,7 +802,7 @@
       <button class="btn-primary hug-btn" id="hugBtn">点击领取抱抱</button>
       <div class="hug-message" id="hugMessage">恭喜你，获得一个以后可以继续偏爱你的人。 💖</div>
       <div class="memory-photo-card" id="memoryPhotoCard" style="animation-delay: 0.08s;">
-        <img id="memoryPhotoImg" src="./assets/photos/09.jpg" alt="你和唐慧慧的回忆照片" />
+        <img id="memoryPhotoImg" src="./assets/photos/09.jpg" alt="你和唐慧慧的回忆照片" loading="lazy" decoding="async" />
         <div class="memory-photo-title">我们的回忆</div>
         <div class="memory-photo-desc">点一下，切换另一张回忆照片。</div>
       </div>
@@ -830,6 +830,25 @@
   </audio>
 
   <script>
+    const photoPreload = [
+      './assets/photos/01.jpg',
+      './assets/photos/02.jpg',
+      './assets/photos/03.jpg',
+      './assets/photos/04.jpg',
+      './assets/photos/05.jpg',
+      './assets/photos/06.jpg',
+      './assets/photos/07.jpg',
+      './assets/photos/08.jpg',
+      './assets/photos/09.jpg',
+      './assets/photos/10.jpg'
+    ];
+    photoPreload.forEach((src) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.loading = 'eager';
+      img.src = src;
+    });
+
     const specialName = '唐慧慧';
 
     const photoAssets = [
@@ -1001,20 +1020,20 @@
     });
 
     function launchBurst(strong = false) {
-      const total = strong ? 40 : 18;
+      const total = strong ? 72 : 18;
       for (let i = 0; i < total; i++) {
         const burst = document.createElement('div');
         burst.className = 'heart';
-        burst.textContent = ['💖','💕','❤','✨','💗'][Math.floor(Math.random() * 5)];
-        burst.style.left = (strong ? 8 + Math.random() * 84 : 40 + Math.random() * 20) + 'vw';
-        burst.style.top = (strong ? 72 + Math.random() * 12 : 55 + Math.random() * 10) + 'vh';
+        burst.textContent = ['💖','💕','❤','✨','💗','💘','🌸'][Math.floor(Math.random() * 7)];
+        burst.style.left = (strong ? 4 + Math.random() * 92 : 40 + Math.random() * 20) + 'vw';
+        burst.style.top = (strong ? 68 + Math.random() * 18 : 55 + Math.random() * 10) + 'vh';
         burst.style.position = 'fixed';
         burst.style.zIndex = '9';
-        burst.style.opacity = strong ? '0.9' : '0.5';
-        burst.style.animation = 'floatUp ' + (strong ? 3.4 + Math.random() * 2.2 : 2.2 + Math.random() * 1.8) + 's ease-out forwards';
-        burst.style.fontSize = (strong ? 18 + Math.random() * 18 : 16 + Math.random() * 10) + 'px';
+        burst.style.opacity = strong ? '0.96' : '0.5';
+        burst.style.animation = 'floatUp ' + (strong ? 4.2 + Math.random() * 2.4 : 2.2 + Math.random() * 1.8) + 's ease-out forwards';
+        burst.style.fontSize = (strong ? 22 + Math.random() * 22 : 16 + Math.random() * 10) + 'px';
         document.body.appendChild(burst);
-        setTimeout(() => burst.remove(), strong ? 5600 : 4200);
+        setTimeout(() => burst.remove(), strong ? 7000 : 4200);
       }
     }
 
