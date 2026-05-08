@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>给最爱的你</title>
+  <style>
+    :root {
+      --bg1: #fffaf8;
+      --bg2: #f8edf2;
+      --bg3: #f1e2e8;
+      --pink: #d88ba7;
+      --pink-dark: #8e5d71;
+      --gold-soft: #d8c2a3;
+      --gold-line: rgba(216, 194, 163, 0.55);
+      --text: #493640;
+      --text-soft: #7b6470;
+      --card: rgba(255,255,255,0.70);
+      --card-strong: rgba(255,255,255,0.84);
+      --shadow: 0 20px 50px rgba(110, 72, 88, 0.14);
+      --ok: #4ea77a;
+      --lock: #f0dce3;
+      --danger: #d97c97;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.96), transparent 28%),
+        radial-gradient(circle at 80% 12%, rgba(255,255,255,0.65), transparent 20%),
+        linear-gradient(180deg, var(--bg1), var(--bg2) 56%, var(--bg3));
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hearts, .sparkles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart, .sparkle {
+      position: absolute;
+      opacity: 0.25;
+      animation: floatUp linear infinite;
+    }
+
+    .heart { color: rgba(216, 139, 167, 0.72); font-size: 18px; }
+    .sparkle { color: rgba(255,255,255,0.95); font-size: 10px; }
+
+    @keyframes floatUp {
+      from { transform: translateY(110vh) scale(0.8); opacity: 0; }
+      15% { opacity: 0.35; }
+      to { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    }
+
+    @keyframes riseFade {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes softPop {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.96);
+      }
+      70% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.01);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      animation: riseFade 0.7s ease both;
+    }
+
+    .intro-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(255,250,248,0.96), rgba(248,237,242,0.98));
+      backdrop-filter: blur(14px);
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    .intro-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-card {
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      padding: 28px 22px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.72));
+      border: 1px solid rgba(255,255,255,0.70);
+      box-shadow: 0 22px 48px rgba(110, 72, 88, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 30px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.7), var(--gold-line), rgba(255,255,255,0.5));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .intro-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--pink-dark);
+      opacity: 0.82;
+    }
+
+    .intro-title {
+      margin-top: 12px;
+      font-size: 31px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    .intro-desc {
+      margin-top: 12px;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .intro-btn {
+      margin-top: 18px;
+      width: 100%;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 20px 16px 18px;
+      margin-top: 8px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.66));
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.62);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 30px;
+      padding: 1px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.72), var(--gold-line), rgba(255,255,255,0.40));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.70);
+      color: var(--pink-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.68);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    h1 {
+      margin: 8px 0 10px;
+      font-size: 31px;
+      line-height: 1.18;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .typing-name {
+      display: inline-block;
+      min-width: 6.5em;
+      color: var(--pink-dark);
+      border-right: 2px solid rgba(142,93,113,0.35);
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: bottom;
+      animation: blinkCursor 0.8s step-end infinite;
+    }
+
+    @keyframes blinkCursor {
+      50% { border-color: transparent; }
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text-soft);
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      margin-top: 14px;
+    }
+
+    .hero-photo {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 26px;
+      display: block;
+      box-shadow: 0 18px 36px rgba(110, 72, 88, 0.16);
+      border: 1px solid rgba(255,255,255,0.82);
+    }
+
+    .hero-photo-overlay {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      padding: 13px 14px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(73,54,64,0.52));
+      color: #fff;
+      text-align: left;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .hero-photo-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-photo-sub {
+      margin-top: 5px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      opacity: 0.88;
+    }
+
+    .music-box {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, opacity 0.22s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #b97b92, #8e5d71);
+      color: white;
+      padding: 13px 18px;
+      border-radius: 18px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      box-shadow: 0 14px 28px rgba(110, 72, 88, 0.20);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.76);
+      color: var(--pink-dark);
+      padding: 13px 18px;
+      border-radius: 18px;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(110, 72, 88, 0.08);
+      border: 1px solid rgba(255,255,255,0.70);
+    }
+
+    .progress-card, .level-card, .final-card {
+      margin-top: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.64));
+      border-radius: 28px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.62);
+      backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+      animation: riseFade 0.68s ease both;
+    }
+
+    .progress-title, .level-title, .final-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .step {
+      text-align: center;
+      background: rgba(255,255,255,0.74);
+      border-radius: 20px;
+      padding: 14px 8px;
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.48);
+    }
+
+    .step.done {
+      border-color: rgba(78,167,122,0.18);
+      background: rgba(255,255,255,0.88);
+    }
+
+    .step.locked { opacity: 0.68; }
+
+    .step-icon {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      background: linear-gradient(180deg, #f5e8ed, #ead7df);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .step.done .step-icon { background: rgba(34,181,115,0.15); }
+    .step-name { font-size: 13px; font-weight: 700; }
+    .step-tip { margin-top: 4px; font-size: 11px; opacity: 0.72; line-height: 1.4; }
+
+    .level-card { display: none; }
+    .level-card.active { display: block; animation: riseFade 0.55s ease both; }
+
+    .question {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #7b5465;
+      margin-bottom: 14px;
+      line-height: 1.6;
+      opacity: 0.88;
+    }
+
+    .game-topbar {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-soft);
+      box-shadow: 0 8px 18px rgba(110, 72, 88, 0.06);
+      border: 1px solid rgba(255,255,255,0.68);
+    }
+
+    .game-area {
+      background: rgba(255,255,255,0.62);
+      border-radius: 22px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .catch-area {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(245,232,237,0.92));
+      border: 1px solid rgba(255,255,255,0.74);
+      touch-action: none;
+    }
+
+    .basket {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 78px;
+      height: 22px;
+      border-radius: 16px 16px 22px 22px;
+      background: linear-gradient(180deg, #ff8fb4, #ff5f96);
+      box-shadow: 0 8px 18px rgba(230, 58, 121, 0.26);
+    }
+
+    .falling-item {
+      position: absolute;
+      top: -20px;
+      width: 56px;
+      height: 74px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.82);
+      box-shadow: 0 12px 24px rgba(82, 36, 58, 0.14);
+      background: #fff;
+      user-select: none;
+    }
+
+    .falling-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .memory-card {
+      aspect-ratio: 1 / 1;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #c88aa1, #e3c7d2);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 20px rgba(110, 72, 88, 0.12);
+      overflow: hidden;
+      position: relative;
+      border: none;
+    }
+
+    .memory-card::before {
+      content: '📸';
+      font-size: 26px;
+      color: #fff;
+    }
+
+    .memory-card.revealed::before,
+    .memory-card.matched::before {
+      display: none;
+    }
+
+    .memory-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .memory-card.revealed,
+    .memory-card.matched {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(216,194,163,0.42);
+    }
+
+    .memory-card.revealed img,
+    .memory-card.matched img {
+      display: block;
+    }
+
+    .memory-photo-card {
+      cursor: pointer;
+    }
+
+    .memory-photo-card img {
+      transition: opacity 0.45s ease;
+      opacity: 1;
+    }
+
+    .memory-photo-card img.is-fading {
+      opacity: 0.18;
+    }
+
+    .tap-area {
+      position: relative;
+      width: 100%;
+      height: 340px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(245,232,237,0.92));
+      border: 1px solid rgba(255,255,255,0.74);
+    }
+
+    .tap-item {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 18px rgba(82, 36, 58, 0.10);
+      border: 2px solid rgba(255,255,255,0.88);
+      background: #fff;
+      padding: 0;
+    }
+
+    .tap-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tap-item.good {
+      outline: 3px solid rgba(216,139,167,0.38);
+    }
+
+    .tap-item.bad {
+      opacity: 0.96;
+    }
+
+    .result {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 20px;
+      line-height: 1.8;
+      font-size: 14px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(255,255,255,0.76);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.48);
+    }
+
+    .result.show { display: block; animation: softPop 0.45s ease both; }
+    .result.success { border-left: 5px solid var(--ok); }
+    .result.error { border-left: 5px solid var(--danger); }
+
+    .love-line {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,77,141,0.08), rgba(255,255,255,0.95));
+      font-weight: 600;
+      color: var(--pink-dark);
+    }
+
+    .next-btn { margin-top: 14px; width: 100%; }
+
+    .final-card { display: none; text-align: center; }
+    .final-card.show { display: block; animation: riseFade 0.7s ease both; }
+
+    .reward-line {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(216,194,163,0.16), rgba(255,255,255,0.84));
+      color: var(--pink-dark);
+      font-weight: 700;
+      line-height: 1.8;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .hug-btn {
+      margin-top: 14px;
+      width: 100%;
+    }
+
+    .hug-message {
+      display: none;
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.96);
+      color: var(--pink-dark);
+      font-weight: 700;
+      line-height: 1.7;
+      border: 1px solid rgba(255,255,255,0.82);
+    }
+
+    .hug-message.show {
+      display: block;
+      animation: softPop 0.42s ease both;
+    }
+
+    .memory-photo-card {
+      margin-top: 14px;
+      text-align: left;
+      background: rgba(255,255,255,0.80);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: 0 14px 28px rgba(110, 72, 88, 0.08);
+      border: 1px solid rgba(255,255,255,0.72);
+      animation: riseFade 0.75s ease both;
+    }
+
+    .memory-photo-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 16px;
+      display: block;
+    }
+
+    .memory-photo-title {
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--pink-dark);
+      letter-spacing: 0.04em;
+    }
+
+    .memory-photo-desc {
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-soft);
+    }
+
+    .letter {
+      margin-top: 14px;
+      text-align: left;
+      background: rgba(255,255,255,0.82);
+      border-radius: 22px;
+      padding: 18px;
+      line-height: 1.95;
+      font-size: 15px;
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.64);
+      animation: riseFade 0.82s ease both;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--text-soft);
+      opacity: 0.78;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 380px) {
+      h1 { font-size: 26px; }
+      .catch-area, .tap-area { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-card">
+      <div class="intro-kicker">PRIVATE LETTER</div>
+      <div class="intro-title">To 唐慧慧 💌</div>
+      <div class="intro-desc">这是一封需要通关才会慢慢打开的情书。<br />准备好了的话，就点一下开始。</div>
+      <button class="btn-primary intro-btn" id="enterBtn">开启情书</button>
+    </div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+  <div class="sparkles" id="sparkles"></div>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="badge">FOR TANG HUIHUI</div>
+      <h1><span class="typing-name" id="typingName"></span></h1>
+      <p class="subtitle">通关三关，解锁三段只想说给你听的话。</p>
+      <div class="hero-photo-wrap">
+        <img class="hero-photo" src="/Users/link/.openclaw/media/inbound/cb8ff0410357e2369c10f1902f71c47c---1074c63d-d1af-4982-b8ae-3b643ade606f.jpg" alt="唐慧慧和你的合照" />
+        <div class="hero-photo-overlay">
+          <div class="hero-photo-title">To 唐慧慧</div>
+          <div class="hero-photo-sub">一份通关后才能完全打开的小情书</div>
+        </div>
+      </div>
+      <div class="music-box">
+        <button class="btn-primary" id="musicBtn">点我播放音乐</button>
+        <button class="btn-secondary" id="restartBtn">重新开始</button>
+      </div>
+    </section>
+
+    <section class="progress-card">
+      <div class="progress-title">爱的进度条</div>
+      <div class="steps">
+        <div class="step" id="step1">
+          <div class="step-icon">💗</div>
+          <div class="step-name">第一关</div>
+          <div class="step-tip">接住照片</div>
+        </div>
+        <div class="step locked" id="step2">
+          <div class="step-icon">🧠</div>
+          <div class="step-name">第二关</div>
+          <div class="step-tip">记忆翻牌</div>
+        </div>
+        <div class="step locked" id="step3">
+          <div class="step-icon">🎯</div>
+          <div class="step-name">第三关</div>
+          <div class="step-tip">真心点击</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="level-card active" id="level1">
+      <div class="level-title">第一关：接住爱心 💗</div>
+      <div class="question">左右移动小托盘，接住 16 张掉落的照片就算通关。</div>
+      <div class="hint">拖动托盘，接住照片小卡片，小心别漏太多，这一关现在非常吃反应。</div>
+      <div class="game-topbar">
+        <div class="pill">已接住：<span id="catchScore">0</span>/16</div>
+        <div class="pill">漏掉：<span id="catchMiss">0</span>/2</div>
+        <button class="btn-secondary" id="startCatchBtn">开始第一关</button>
+      </div>
+      <div class="game-area">
+        <div class="catch-area" id="catchArea">
+          <div class="basket" id="basket"></div>
+        </div>
+      </div>
+      <div class="result" id="result1"></div>
+    </section>
+
+    <section class="level-card" id="level2">
+      <div class="level-title">第二关：记忆翻牌 🧠</div>
+      <div class="question">翻出 5 组相同照片，就能解锁下一段心里话。</div>
+      <div class="hint">一共会有更多照片，翻错会扣节奏，但不会重新开始。</div>
+      <div class="game-topbar">
+        <div class="pill">已配对：<span id="memoryScore">0</span>/5</div>
+        <button class="btn-secondary" id="startMemoryBtn">开始第二关</button>
+      </div>
+      <div class="game-area">
+        <div class="memory-grid" id="memoryGrid"></div>
+      </div>
+      <div class="result" id="result2"></div>
+    </section>
+
+    <section class="level-card" id="level3">
+      <div class="level-title">第三关：真心点击 🎯</div>
+      <div class="question">在限时内找出不同的照片，点中 9 次就通关。</div>
+      <div class="hint">点中不同照片加分，点错不加分，照片更多、节奏更快、切换更密。</div>
+      <div class="game-topbar">
+        <div class="pill">得分：<span id="tapScore">0</span>/9</div>
+        <div class="pill">时间：<span id="tapTime">12</span>s</div>
+        <button class="btn-secondary" id="startTapBtn">开始第三关</button>
+      </div>
+      <div class="game-area">
+        <div class="tap-area" id="tapArea"></div>
+      </div>
+      <div class="result" id="result3"></div>
+    </section>
+
+    <section class="final-card" id="finalCard">
+      <div class="final-title">🎉 恭喜你，成功通关我的偏爱</div>
+      <p>三段情话已经全部解锁，最后这封完整的情书，只送给你。</p>
+      <div class="reward-line">唐慧慧，你已成功俘获本轮唯一心动选手。 😄</div>
+      <button class="btn-primary hug-btn" id="hugBtn">点击领取抱抱</button>
+      <div class="hug-message" id="hugMessage">恭喜你，获得一个以后可以继续偏爱你的人。 💖</div>
+      <div class="memory-photo-card" id="memoryPhotoCard" style="animation-delay: 0.08s;">
+        <img id="memoryPhotoImg" src="./assets/photos/09.jpg" alt="你和唐慧慧的回忆照片" />
+        <div class="memory-photo-title">我们的回忆</div>
+        <div class="memory-photo-desc">点一下，切换另一张回忆照片。</div>
+      </div>
+      <div class="letter" style="animation-delay: 0.16s;">
+        <strong>给唐慧慧：</strong><br /><br />
+        你闯过了第一关，代表我们可以一起闯过很多很多关喔，因为我始终会在你身边，用爱给你加油，爱你。<br /><br />
+        我会好好和我飞哥学习的喔，并时刻提醒自己和改进自己的，
+        认认真真对待你，认认真真爱你，嘿嘿。<br /><br />
+        我写这封小游戏情书，
+        只是想让你知道：<strong>并不是偷懒没写，是想给你点新鲜的，嘿嘿。</strong><br /><br />
+        唐慧慧，我爱你。<br />
+        不是随便说说，是从心底觉得，和你在一起很开心，且实心实意的愿意为你做很多很多事，
+        就算有时候调皮一下，说不同意这个那个的，也都会自己给自己找个理由的，嘿嘿。 ❤️
+      </div>
+      <div class="music-box">
+        <button class="btn-primary" id="confettiBtn">💖 再放一次心动特效</button>
+      </div>
+    </section>
+
+    <div class="footer-note">愿你点开的每一关，最后都通向我的真心。</div>
+  </div>
+
+  <audio id="bgMusic" loop preload="auto" playsinline webkit-playsinline>
+    <source src="./assets/music.m4a" type="audio/mp4" />
+  </audio>
+
+  <script>
+    const specialName = '唐慧慧';
+
+    const photoAssets = [
+      './assets/photos/01.jpg',
+      './assets/photos/02.jpg',
+      './assets/photos/03.jpg',
+      './assets/photos/04.jpg',
+      './assets/photos/05.jpg',
+      './assets/photos/06.jpg',
+      './assets/photos/07.jpg',
+      './assets/photos/08.jpg',
+      './assets/photos/09.jpg',
+      './assets/photos/10.jpg'
+    ];
+    const memoryPhotos = photoAssets.slice(0, 5);
+    const tapBasePhotos = photoAssets.slice(3, 10);
+
+    const levelText = {
+      1: {
+        love: '第一段情话解锁：你闯过了第一关，代表我们可以一起闯过很多很多关喔，因为我始终会在你身边，用爱给你加油，爱你。',
+        fail: '这次没接够照片也没关系，可能是我一想到你就开始分心，把回忆都撒得到处都是。再来一次～'
+      },
+      2: {
+        love: '第二段情话解锁：日子慢悠悠，生活乐呵呵。我们要一起把属于我们两个的小日子过好，认真对待每一天、每一个周末、每一个节假日、每一个重要场合。爱你。',
+        fail: '这次照片记忆有点乱也没关系，但我关于你的心动，从来都记得很清楚。毕竟你这种级别，很难忘。'
+      },
+      3: {
+        love: '第三段情话解锁：我会好好和我飞哥学习的喔，并时刻提醒自己和改进自己的，认认真真对待你，认认真真爱你，嘿嘿。',
+        fail: '差一点点就找到那张不同的照片啦，再来一次。这次如果还没赢，我就怀疑是你太可爱，系统都舍不得让你这么快通关。'
+      }
+    };
+
+    let currentLevel = 1;
+    const completed = new Set();
+    const music = document.getElementById('bgMusic');
+    const typingNameEl = document.getElementById('typingName');
+    const introScreen = document.getElementById('introScreen');
+    const enterBtn = document.getElementById('enterBtn');
+    const hugBtn = document.getElementById('hugBtn');
+    const hugMessage = document.getElementById('hugMessage');
+    const musicBtn = document.getElementById('musicBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const confettiBtn = document.getElementById('confettiBtn');
+    const memoryPhotoCard = document.getElementById('memoryPhotoCard');
+    const memoryPhotoImg = document.getElementById('memoryPhotoImg');
+    let memoryPhotoIndex = 8;
+
+    function typeName() {
+      let index = 0;
+      typingNameEl.textContent = '';
+      const timer = setInterval(() => {
+        typingNameEl.textContent = specialName.slice(0, index + 1);
+        index += 1;
+        if (index >= specialName.length) clearInterval(timer);
+      }, 220);
+    }
+
+    function createFloating(containerId, icon, count) {
+      const box = document.getElementById(containerId);
+      box.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = containerId === 'hearts' ? 'heart' : 'sparkle';
+        el.textContent = icon[Math.floor(Math.random() * icon.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (6 + Math.random() * 8) + 's';
+        el.style.animationDelay = (Math.random() * 8) + 's';
+        el.style.fontSize = (12 + Math.random() * 16) + 'px';
+        box.appendChild(el);
+      }
+    }
+
+    createFloating('hearts', ['❤', '💗', '💖', '💕'], 18);
+    createFloating('sparkles', ['✦', '✧', '✨'], 24);
+
+    function updateSteps() {
+      [1, 2, 3].forEach((n) => {
+        const step = document.getElementById('step' + n);
+        step.classList.remove('done', 'locked');
+        if (completed.has(n)) {
+          step.classList.add('done');
+        } else if (n !== currentLevel) {
+          step.classList.add('locked');
+        }
+      });
+    }
+
+    function showLevel(level) {
+      document.querySelectorAll('.level-card').forEach(card => card.classList.remove('active'));
+      const target = document.getElementById('level' + level);
+      if (target) target.classList.add('active');
+      updateSteps();
+      window.scrollTo({ top: 220, behavior: 'smooth' });
+    }
+
+    function unlockNext(level) {
+      completed.add(level);
+      updateSteps();
+      if (level < 3) {
+        currentLevel = level + 1;
+      } else {
+        document.querySelectorAll('.level-card').forEach(card => card.classList.remove('active'));
+        document.getElementById('finalCard').classList.add('show');
+        launchBurst(true);
+      }
+    }
+
+    function showSuccess(level) {
+      const result = document.getElementById('result' + level);
+      result.className = 'result show success';
+      result.innerHTML = '通关成功，恭喜你解锁这一段心里话 💖<div class="love-line">' + levelText[level].love + '</div>' +
+        (level < 3 ? '<button class="btn-primary next-btn" onclick="goNext(' + level + ')">进入下一关</button>' : '<button class="btn-primary next-btn" onclick="goNext(' + level + ')">查看最终情书</button>');
+    }
+
+    function showFail(level) {
+      const result = document.getElementById('result' + level);
+      result.className = 'result show error';
+      result.textContent = levelText[level].fail;
+    }
+
+    window.goNext = function(level) {
+      unlockNext(level);
+      if (level < 3) showLevel(level + 1);
+    };
+
+    enterBtn.addEventListener('click', async () => {
+      introScreen.classList.add('hidden');
+      typeName();
+      try {
+        await music.play();
+        musicBtn.textContent = '暂停音乐';
+      } catch (err) {
+        musicBtn.textContent = '点我播放音乐';
+      }
+    });
+
+    async function toggleMusic() {
+      try {
+        if (music.paused) {
+          await music.play();
+          musicBtn.textContent = '暂停音乐';
+        } else {
+          music.pause();
+          musicBtn.textContent = '点我播放音乐';
+        }
+      } catch (err) {
+        alert('这首音乐现在可能没加载成功。最稳的方式是换成你本地的一首 mp3，我可以直接帮你接进去。');
+      }
+    }
+    musicBtn.addEventListener('click', toggleMusic);
+
+    function resetAllResults() {
+      document.querySelectorAll('.result').forEach(el => {
+        el.className = 'result';
+        el.innerHTML = '';
+      });
+      document.getElementById('finalCard').classList.remove('show');
+      hugMessage.classList.remove('show');
+    }
+
+    restartBtn.addEventListener('click', () => {
+      currentLevel = 1;
+      completed.clear();
+      resetAllResults();
+      resetCatchGame();
+      resetMemoryGame();
+      resetTapGame();
+      showLevel(1);
+    });
+
+    function launchBurst(strong = false) {
+      const total = strong ? 40 : 18;
+      for (let i = 0; i < total; i++) {
+        const burst = document.createElement('div');
+        burst.className = 'heart';
+        burst.textContent = ['💖','💕','❤','✨','💗'][Math.floor(Math.random() * 5)];
+        burst.style.left = (strong ? 8 + Math.random() * 84 : 40 + Math.random() * 20) + 'vw';
+        burst.style.top = (strong ? 72 + Math.random() * 12 : 55 + Math.random() * 10) + 'vh';
+        burst.style.position = 'fixed';
+        burst.style.zIndex = '9';
+        burst.style.opacity = strong ? '0.9' : '0.5';
+        burst.style.animation = 'floatUp ' + (strong ? 3.4 + Math.random() * 2.2 : 2.2 + Math.random() * 1.8) + 's ease-out forwards';
+        burst.style.fontSize = (strong ? 18 + Math.random() * 18 : 16 + Math.random() * 10) + 'px';
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), strong ? 5600 : 4200);
+      }
+    }
+
+    confettiBtn.addEventListener('click', () => launchBurst(true));
+    hugBtn.addEventListener('click', () => {
+      hugMessage.classList.add('show');
+      launchBurst(true);
+    });
+
+    if (memoryPhotoCard && memoryPhotoImg) {
+      memoryPhotoCard.addEventListener('click', () => {
+        memoryPhotoImg.classList.add('is-fading');
+        setTimeout(() => {
+          memoryPhotoIndex = (memoryPhotoIndex + 1) % photoAssets.length;
+          memoryPhotoImg.src = photoAssets[memoryPhotoIndex];
+          memoryPhotoImg.classList.remove('is-fading');
+        }, 180);
+      });
+    }
+
+    // Helpers
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    function makePhotoImg(src, alt = '回忆照片') {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt;
+      return img;
+    }
+
+    // Game 1: Catch photos
+    const catchArea = document.getElementById('catchArea');
+    const basket = document.getElementById('basket');
+    const catchScoreEl = document.getElementById('catchScore');
+    const catchMissEl = document.getElementById('catchMiss');
+    const startCatchBtn = document.getElementById('startCatchBtn');
+    let catchScore = 0;
+    let catchMiss = 0;
+    let catchInterval = null;
+    let catchRunning = false;
+
+    function placeBasket(clientX) {
+      const rect = catchArea.getBoundingClientRect();
+      const width = basket.offsetWidth;
+      let x = clientX - rect.left - width / 2;
+      x = Math.max(0, Math.min(rect.width - width, x));
+      basket.style.left = x + 'px';
+      basket.style.transform = 'translateX(0)';
+    }
+
+    catchArea.addEventListener('pointermove', (e) => {
+      if (!catchRunning) return;
+      placeBasket(e.clientX);
+    });
+
+    function updateCatchUI() {
+      catchScoreEl.textContent = catchScore;
+      catchMissEl.textContent = catchMiss;
+    }
+
+    function stopCatchGame(success) {
+      catchRunning = false;
+      clearInterval(catchInterval);
+      catchInterval = null;
+      catchArea.querySelectorAll('.falling-item').forEach(el => el.remove());
+      if (success) showSuccess(1);
+      else showFail(1);
+    }
+
+    function resetCatchGame() {
+      catchScore = 0;
+      catchMiss = 0;
+      catchRunning = false;
+      clearInterval(catchInterval);
+      catchArea.querySelectorAll('.falling-item').forEach(el => el.remove());
+      basket.style.left = '50%';
+      basket.style.transform = 'translateX(-50%)';
+      updateCatchUI();
+    }
+
+    function spawnFallingPhoto() {
+      if (!catchRunning) return;
+      const item = document.createElement('div');
+      item.className = 'falling-item';
+      item.appendChild(makePhotoImg(photoAssets[Math.floor(Math.random() * photoAssets.length)], '掉落的回忆照片'));
+      const rect = catchArea.getBoundingClientRect();
+      let x = Math.random() * (rect.width - 56);
+      let y = -10;
+      item.style.left = x + 'px';
+      item.style.top = y + 'px';
+      catchArea.appendChild(item);
+      const speed = 2.5 + Math.random() * 1.6;
+
+      function fall() {
+        if (!catchRunning || !item.isConnected) return;
+        y += speed;
+        item.style.top = y + 'px';
+        const basketRect = basket.getBoundingClientRect();
+        const itemRect = item.getBoundingClientRect();
+        if (
+          itemRect.bottom >= basketRect.top &&
+          itemRect.left < basketRect.right &&
+          itemRect.right > basketRect.left &&
+          itemRect.bottom <= basketRect.bottom + 18
+        ) {
+          catchScore += 1;
+          updateCatchUI();
+          item.remove();
+          if (catchScore >= 16) return stopCatchGame(true);
+          return;
+        }
+        if (y > rect.height) {
+          catchMiss += 1;
+          updateCatchUI();
+          item.remove();
+          if (catchMiss >= 2) return stopCatchGame(false);
+          return;
+        }
+        requestAnimationFrame(fall);
+      }
+      requestAnimationFrame(fall);
+    }
+
+    startCatchBtn.addEventListener('click', () => {
+      resetAllResults();
+      resetCatchGame();
+      catchRunning = true;
+      updateCatchUI();
+      catchInterval = setInterval(spawnFallingPhoto, 250);
+    });
+
+    // Game 2: Memory photos
+    const memoryGrid = document.getElementById('memoryGrid');
+    const memoryScoreEl = document.getElementById('memoryScore');
+    const startMemoryBtn = document.getElementById('startMemoryBtn');
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let memoryLocked = false;
+    let memoryStarted = false;
+
+    function updateMemoryUI() {
+      memoryScoreEl.textContent = matchedPairs;
+    }
+
+    function resetMemoryGame() {
+      flippedCards = [];
+      matchedPairs = 0;
+      memoryLocked = false;
+      memoryStarted = false;
+      memoryGrid.innerHTML = '';
+      updateMemoryUI();
+    }
+
+    function buildMemoryGame() {
+      resetAllResults();
+      resetMemoryGame();
+      memoryStarted = true;
+      const cards = shuffle([...memoryPhotos, ...memoryPhotos]);
+      cards.forEach((src, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'memory-card';
+        btn.dataset.photo = src;
+        btn.dataset.index = index;
+        btn.appendChild(makePhotoImg(src, '记忆照片卡片'));
+        btn.addEventListener('click', () => {
+          if (!memoryStarted || memoryLocked || btn.classList.contains('matched') || btn.classList.contains('revealed')) return;
+          btn.classList.add('revealed');
+          flippedCards.push(btn);
+          if (flippedCards.length === 2) {
+            memoryLocked = true;
+            const [a, b] = flippedCards;
+            if (a.dataset.photo === b.dataset.photo) {
+              a.classList.add('matched');
+              b.classList.add('matched');
+              flippedCards = [];
+              matchedPairs += 1;
+              updateMemoryUI();
+              memoryLocked = false;
+              if (matchedPairs >= 5) {
+                memoryStarted = false;
+                showSuccess(2);
+              }
+            } else {
+              setTimeout(() => {
+                a.classList.remove('revealed');
+                b.classList.remove('revealed');
+                flippedCards = [];
+                memoryLocked = false;
+              }, 700);
+            }
+          }
+        });
+        memoryGrid.appendChild(btn);
+      });
+    }
+
+    startMemoryBtn.addEventListener('click', buildMemoryGame);
+
+    // Game 3: Find the different photo
+    const tapArea = document.getElementById('tapArea');
+    const tapScoreEl = document.getElementById('tapScore');
+    const tapTimeEl = document.getElementById('tapTime');
+    const startTapBtn = document.getElementById('startTapBtn');
+    let tapScore = 0;
+    let tapTime = 12;
+    let tapTimer = null;
+    let tapSpawner = null;
+    let tapRunning = false;
+
+    function updateTapUI() {
+      tapScoreEl.textContent = tapScore;
+      tapTimeEl.textContent = tapTime;
+    }
+
+    function clearTapItems() {
+      tapArea.querySelectorAll('.tap-item').forEach(el => el.remove());
+    }
+
+    function stopTapGame(success) {
+      tapRunning = false;
+      clearInterval(tapTimer);
+      clearTimeout(tapSpawner);
+      clearTapItems();
+      if (success) showSuccess(3);
+      else showFail(3);
+    }
+
+    function resetTapGame() {
+      tapScore = 0;
+      tapTime = 12;
+      tapRunning = false;
+      clearInterval(tapTimer);
+      clearTimeout(tapSpawner);
+      clearTapItems();
+      updateTapUI();
+    }
+
+    function spawnTapRound() {
+      if (!tapRunning) return;
+      clearTapItems();
+      const rect = tapArea.getBoundingClientRect();
+      const size = 58;
+      const positions = shuffle([
+        { x: 16, y: 22 },
+        { x: rect.width / 2 - size / 2, y: 18 },
+        { x: rect.width - size - 16, y: 22 },
+        { x: 18, y: rect.height / 2 - size / 2 },
+        { x: rect.width - size - 18, y: rect.height / 2 - size / 2 },
+        { x: 16, y: rect.height - size - 22 },
+        { x: rect.width / 2 - size / 2, y: rect.height - size - 18 },
+        { x: rect.width - size - 16, y: rect.height - size - 22 }
+      ]);
+      const base = tapBasePhotos[Math.floor(Math.random() * tapBasePhotos.length)];
+      const diffOptions = tapBasePhotos.filter(src => src !== base);
+      const diff = diffOptions[Math.floor(Math.random() * diffOptions.length)] || photoAssets[0];
+      const targetIndex = Math.floor(Math.random() * positions.length);
+
+      positions.forEach((pos, index) => {
+        const item = document.createElement('button');
+        const isTarget = index === targetIndex;
+        item.className = 'tap-item ' + (isTarget ? 'good' : 'bad');
+        item.style.left = pos.x + 'px';
+        item.style.top = pos.y + 'px';
+        item.appendChild(makePhotoImg(isTarget ? diff : base, isTarget ? '不同照片' : '相同照片'));
+        item.addEventListener('click', () => {
+          if (!tapRunning) return;
+          if (isTarget) {
+            tapScore += 1;
+            updateTapUI();
+            if (tapScore >= 9) return stopTapGame(true);
+          }
+          spawnTapRound();
+        });
+        tapArea.appendChild(item);
+      });
+
+      clearTimeout(tapSpawner);
+      tapSpawner = setTimeout(() => {
+        if (tapRunning) spawnTapRound();
+      }, 1000);
+    }
+
+    startTapBtn.addEventListener('click', () => {
+      resetAllResults();
+      resetTapGame();
+      tapRunning = true;
+      updateTapUI();
+      spawnTapRound();
+      tapTimer = setInterval(() => {
+        tapTime -= 1;
+        updateTapUI();
+        if (tapTime <= 0) stopTapGame(tapScore >= 6);
+      }, 1000);
+    });
+
+    updateSteps();
+    resetCatchGame();
+    resetMemoryGame();
+    resetTapGame();
+  </script>
+</body>
+</html>
